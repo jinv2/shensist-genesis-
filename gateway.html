@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神思庭 · 全息世界多模态智能体 | 创世首映</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #050505; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
+        #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; color: #4a90e2; display: flex; justify-content: center; align-items: center; font-family: sans-serif; pointer-events: none; transition: opacity 0.5s; }
+    </style>
+</head>
+<body>
+    <div id="loading">正在接入神思庭多模态算力矩阵...</div>
+    <iframe 
+        src="https://jinv2-genesis-agent.hf.space" 
+        allow="microphone; camera; autoplay; encrypted-media"
+        onload="document.getElementById('loading').style.opacity='0';">
+    </iframe>
+</body>
+</html>

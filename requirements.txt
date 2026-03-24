@@ -1,3 +1,4 @@
+nest-asyncio
 flask
 flask-cors
 edge-tts

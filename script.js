@@ -1,12 +1,10 @@
-import ShensistDatabase from './assets/database.js';
-
 /**
  * © 2026 神思庭艺术智能工作室 (AIS) | 著作权人：金威
  * 版权所有，未经授权禁止商业使用 | shensist.top
  */
 class GenesisAUI {
     constructor() {
-        this.database = ShensistDatabase;
+        this.database = window.ShensistDatabase;
         this.currentActor = this.database.actors[0]; // Default: Nine-tailed Fox
         this.isListening = false;
         this.recognition = null;
@@ -25,6 +23,9 @@ class GenesisAUI {
         this.renderActors();
         this.switchActor(this.currentActor.id);
         this.bindEvents();
+        
+        // Initial tab check
+        this.switchTab('lyrics');
     }
 
     populatePlaylist() {
@@ -132,10 +133,16 @@ class GenesisAUI {
     }
 
     toggleArchives(show) {
+        console.log("📂 Toggling Archives:", show);
         if (show) {
             this.archivesPanel.classList.add('open');
             document.body.classList.add('archives-open');
             this.loadArchiveContent();
+            
+            // Ensure first tab is active
+            if (!document.querySelector('.tab-btn.active')) {
+                this.switchTab('lyrics');
+            }
         } else {
             this.archivesPanel.classList.remove('open');
             document.body.classList.remove('archives-open');
@@ -143,9 +150,12 @@ class GenesisAUI {
     }
 
     switchTab(tab) {
+        console.log("📑 Switching to Tab:", tab);
         this.tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
         document.querySelectorAll('.content-view').forEach(view => {
-            view.classList.toggle('active', view.id === `content-${tab}`);
+            const isActive = view.id === `content-${tab}`;
+            view.classList.toggle('active', isActive);
+            if (isActive) console.log(`✅ Activated view: ${view.id}`);
         });
     }
 
@@ -154,11 +164,11 @@ class GenesisAUI {
 
         try {
             // Load Lyrics
-            const lyricsRes = await fetch('assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88%E6%AD%8C%E8%AF%8D%EF%BC%89.txt');
+            const lyricsRes = await fetch('assets/shensist_genesis_lyrics.txt');
             if (lyricsRes.ok) this.contentLyrics.innerText = await lyricsRes.text();
 
             // Load Novel
-            const novelRes = await fetch('assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88%E5%B0%8F%E8%AF%B4%EF%BC%89.txt');
+            const novelRes = await fetch('assets/shensist_genesis_novel.txt');
             if (novelRes.ok) this.contentNovel.innerText = await novelRes.text();
 
             // Load Theater (Videos)

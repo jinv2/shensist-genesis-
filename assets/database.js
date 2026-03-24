@@ -16,9 +16,9 @@ const ShensistDatabase = {
         { name: "神思庭·创世 (YouTube版)", url: "https://www.youtube.com/embed/qQ92mwmEEKc" }
     ],
     playlist: [
-        { name: "神思庭·创世 (MV)", src: "assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88MV%EF%BC%89.mp3" },
-        { name: "神思庭·创世 (主题歌)", src: "assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88%E4%B8%BB%E9%A2%98%E6%AD%8C%EF%BC%89.mp3" },
-        { name: "神思庭·创世 (插曲)", src: "assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88%E6%8F%92%E6%9B%B2%EF%BC%89.mp3" }
+        { name: "神思庭·创世 (MV)", src: "assets/shensist_genesis_mv.mp3" },
+        { name: "神思庭·创世 (主题歌)", src: "assets/shensist_genesis_theme.mp3" },
+        { name: "神思庭·创世 (插曲)", src: "assets/shensist_genesis_interlude.mp3" }
     ],
     lyrics: `
         《神思庭·创世》
@@ -148,4 +148,4 @@ const ShensistDatabase = {
     }
 };
 
-export default ShensistDatabase;
+window.ShensistDatabase = ShensistDatabase;

@@ -11,15 +11,17 @@
 <body class="theater-mode">
     <!-- AIS Logo & Theater Controls -->
     <div id="ais-top-bar">
-        <div class="logo-section">
-            <div class="logo-circle">
-                <img src="assets/logo_ts.webp" alt="AIS Logo" class="logo-img">
+        <a href="https://shensist.top/" target="_blank" class="logo-link">
+            <div class="logo-section">
+                <div class="logo-circle">
+                    <img src="assets/logo_ts.webp" alt="AIS Logo" class="logo-img">
+                </div>
+                <div class="title-group">
+                    <div class="logo-title">神思庭 · 创世</div>
+                    <div class="logo-subtitle">全息世界多模态智能体</div>
+                </div>
             </div>
-            <div class="title-group">
-                <div class="logo-title">神思庭 · 创世</div>
-                <div class="logo-subtitle">全息世界多模态智能体</div>
-            </div>
-        </div>
+        </a>
         <div id="theater-controls">
             <button id="toggle-archives" class="control-btn" title="查看灵境档案">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -123,7 +125,7 @@
 
     <!-- Global Music Player (The Official Soundtrack) -->
     <audio id="mv-audio">
-        <source src="assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88MV%EF%BC%89.mp3" type="audio/mp3">
+        <source src="assets/shensist_genesis_mv.mp3" type="audio/mp3">
     </audio>
 
     <!-- Copyright Footer -->
@@ -132,6 +134,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="script.js"></script>
+    <script src="assets/database.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神思庭 · 全息世界多模态智能体</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body class="theater-mode">
+    <!-- AIS Logo & Theater Controls -->
+    <div id="ais-top-bar">
+        <div class="logo-section">
+            <div class="logo-circle">
+                <img src="assets/logo_ts.webp" alt="AIS Logo" class="logo-img">
+            </div>
+            <div class="title-group">
+                <div class="logo-title">神思庭 · 创世</div>
+                <div class="logo-subtitle">全息世界多模态智能体</div>
+            </div>
+        </div>
+        <div id="theater-controls">
+            <button id="toggle-archives" class="control-btn" title="查看灵境档案">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+            </button>
+            <button id="toggle-music" class="control-btn" title="切换背景音乐">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+            </button>
+            <div class="audio-controls-group">
+                <select id="playlist-select" class="control-select">
+                    <!-- Options populated by JS -->
+                </select>
+                <div class="progress-container">
+                    <span id="current-time" class="time-label">00:00</span>
+                    <input type="range" id="music-progress" value="0" step="0.1" class="progress-slider">
+                    <span id="total-time" class="time-label">00:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Theater Layer -->
+    <div id="theater-stage">
+        <!-- Background Video (Representing the Genesis MV) -->
+        <div class="video-overlay"></div>
+        <video id="bg-video" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-abstract-shapes-4414-large.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Interactive Layer -->
+    <main id="aui-container">
+        <!-- Sidebar Actor Gallery (Moved to Left) -->
+        <aside id="actor-gallery" class="glass-panel">
+            <h3>唤醒山海灵兽</h3>
+            <div id="actor-list">
+                <!-- Data-driven actors will be injected here -->
+            </div>
+        </aside>
+
+        <!-- Floating Interaction Panel -->
+        <section id="main-interface" class="glass-panel">
+            <div id="actor-portrait-container">
+                <img id="actor-portrait" src="assets/（九尾狐）@mmmmmmmm1.foxqueenah.webp" alt="Actor Portrait" class="actor-portrait">
+            </div>
+            <div class="header">
+                <h1 id="agent-name">神思庭 · AI山海造物主</h1>
+                <p id="agent-status-text">全息频率已就绪</p>
+            </div>
+
+            <div id="response-area">
+                <p id="agent-text">欢迎来到全息世界。在这里，传说不再是故纸堆里的文字。</p>
+            </div>
+
+            <div class="interaction-footer">
+                <div id="voice-trigger" class="pulse-container">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <button id="listen-btn" title="点击开始对话">
+                        <svg viewBox="0 0 24 24" fill="white" width="32" height="32">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="input-feedback">
+                    <span id="listening-text">正在监听频率...</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lingjing Archives Panel (Hidden by default) -->
+    <div id="archives-panel" class="glass-panel side-panel">
+        <div class="panel-header">
+            <h2>灵境档案</h2>
+            <div class="header-actions">
+                <button id="toggle-fullscreen" class="panel-btn" title="全屏查看">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                    </svg>
+                </button>
+                <button id="close-archives" class="panel-btn" title="关闭">✕</button>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="lyrics">创世歌词</button>
+            <button class="tab-btn" data-tab="novel">山海小说</button>
+            <button class="tab-btn" data-tab="theater">山海剧场</button>
+        </div>
+        <div class="tab-content">
+            <div id="content-lyrics" class="content-view active"></div>
+            <div id="content-novel" class="content-view"></div>
+            <div id="content-theater" class="content-view"></div>
+        </div>
+    </div>
+
+    <!-- Global Music Player (The Official Soundtrack) -->
+    <audio id="mv-audio">
+        <source src="assets/%20%E7%A5%9E%E6%80%9D%E5%BA%AD%C2%B7%E5%88%9B%E4%B8%96%EF%BC%88MV%EF%BC%89.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Copyright Footer -->
+    <footer>
+        <p>© 2026 神思庭艺术智能工作室 (AIS) | 著作权人：金威 | 版权所有，未经授权禁止商业使用 | <a href="https://shensist.top/" target="_blank">shensist.top</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

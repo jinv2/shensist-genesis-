@@ -7,6 +7,7 @@ class GenesisAUI {
         this.database = window.ShensistDatabase;
         this.currentActor = this.database.actors[0]; // Default: Nine-tailed Fox
         this.isListening = false;
+        this.speechSupported = false;
         this.recognition = null;
         this.audioPlayer = new Audio();
         this.currentTrackIndex = 0;
@@ -103,7 +104,7 @@ class GenesisAUI {
             this.recognition.onstart = () => {
                 this.isListening = true;
                 this.listenBtn.classList.add('listening');
-                this.statusText.innerText = "正在监听频率...";
+                this.updateStatus("正在监听频率...");
                 
                 // Mute all audio/video while listening
                 this.mvAudio.pause();
@@ -402,7 +403,7 @@ class GenesisAUI {
             el.classList.toggle('active', el.dataset.id === id);
         });
 
-        this.statusText.innerText = `${actor.name} 已就绪`;
+        this.updateStatus();
         
         // Only auto-speak if it's not the initial setup (user clicked)
         if (id !== this.database.actors[0].id || this.hasInteracted) {

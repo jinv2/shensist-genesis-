@@ -1,32 +1,25 @@
-# Shensist Genesis Agent (神思庭 · 创世)
+---
+title: Genesis-Agent
+emoji: 🌌
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_file: app.py
+pinned: false
+---
 
-Multi-modal agent theater interface with personality-driven character interactions, voice synthesis, and local memory integration.
+# 🌌 神思庭 · 全息世界多模态智能体 (Genesis-Agent)
 
-## Features
-- **Dynamic Personas**: Characters with unique "Constitution" files.
-- **Glassmorphism UI**: Modern, responsive interface with adaptive grid layout.
-- **Edge-TTS**: High-quality voice synthesis for each character.
-- **Novel/Lyric Memory**: RAG-based responses integrated from local assets.
+**演员是AI，剧本是活的，观众成为主角。**
 
-## Deployment
+### ⚠️ 版权声明 (Copyright Protection)
+本项目由 **Shensist-Agent 架构师 (@mmmmmmmm1r)** 开发，受 **神思庭艺术智能工作室 (AIS)** 严格版权保护。
+- **禁止商业用途**：未经授权禁止任何形式的商业封装与二次分发。
+- **原创资产**：包含九尾狐、小青、恶霸等山海经众灵的 AI 逻辑与视觉资产。
 
-### Hugging Face Spaces (Recommended)
-1. Create a new "Docker" Space on Hugging Face.
-2. Push this repository to the Space.
-3. The `Dockerfile` will automatically configure the environment and start the server on port 7860.
+### 🚀 平台信息
+- **官网**: https://shensist.top/
+- **架构**: AUI (Agentic User Interface) 2026
+- **技术栈**: Docker + Python + Edge-TTS + Shensist_Matrix
 
-### Local Development
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run server: `python server.py`
-3. Access at `http://localhost:7860`
-
-## Structure
-- `/Global_Shensist_Skills`: Core logic for brain and voice.
-- `/assets`: Database, images, and memory (novel/lyrics).
-- `server.py`: Flask backend.
-- `index.html`: Web interface.
-
-## License
-This project is licensed under the **Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0)**. 
-Unauthorised commercial use or modification and redistribution is strictly prohibited.
-© 2026 Shensist Art AI Studio / Jin Wei.
+© 2026 神思庭艺术智能工作室 (AIS) | WX: Shensi-ST

@@ -124,10 +124,10 @@ body {
 }
 
 .logo-circle {
-    width: 70px;
-    height: 70px;
-    aspect-ratio: 1 / 1;
-    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    aspect-ratio: 1 / 1 !important;
+    flex-shrink: 0 !important;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.8);
     display: flex;
@@ -137,13 +137,14 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
 }
 
 .logo-img {
@@ -174,7 +175,7 @@ body {
     transform: scale(1.1);
 }
 
-#theater-controls {
+#top-bar-controls {
     display: flex;
     gap: 15px;
 }
@@ -200,20 +201,63 @@ body {
     color: var(--accent-color);
 }
 
-.control-btn.off {
-    color: #ff0055;
-    border-color: #ff0055;
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--glass-bg);
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.audio-controls-group {
+.main-controls {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background: var(--glass-bg);
-    padding: 10px 15px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
+    gap: 12px;
+    align-items: center;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 12px;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.control-btn:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: scale(1.15);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.icon-btn:hover {
+    color: white;
 }
 
 .control-select {
@@ -476,22 +520,28 @@ h1 {
 }
 
 #archives-panel {
+    grid-column: 3;
     width: 100%;
-    height: 65vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(50px);
+    transform: translateX(30px);
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     visibility: hidden;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.85); /* 确保背景在桌面也有效 */
+    backdrop-filter: blur(40px);
+    border-left: 1px solid var(--glass-border);
+    z-index: 100;
 }
 
 #archives-panel.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-    visibility: visible;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
 }
 
 #archives-panel.fullscreen {
@@ -592,6 +642,118 @@ h1 {
     display: block;
 }
 
+/* Music Module Styling */
+.music-module-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    height: 100%;
+}
+
+.music-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.music-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.music-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.music-item.active {
+    background: var(--accent-glow);
+    border-color: var(--accent-color);
+}
+
+.music-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.music-item-name {
+    font-weight: 700;
+    color: white;
+}
+
+.music-item-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.music-player-widget {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+}
+
+.player-controls-compact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.player-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.player-btn.large {
+    width: 60px;
+    height: 60px;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: black;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.player-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.player-btn.large:hover {
+    box-shadow: 0 0 30px var(--accent-glow);
+    background: white;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .actor-item {
     border: none;
     color: white;
@@ -674,6 +836,16 @@ footer a {
         right: 20px;
     }
 
+    #listen-btn {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 80px;
+        z-index: 9999;
+    }
+
     .logo-circle {
         width: 60px;
         height: 60px;
@@ -687,6 +859,7 @@ footer a {
         display: flex;
         flex-direction: column;
         padding-top: 140px;
+        padding-bottom: 120px;
         overflow-y: auto;
         gap: 30px;
         height: auto;
@@ -727,26 +900,27 @@ footer a {
     }
 
     #archives-panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        z-index: 2000;
-        transform: translateY(100%);
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        background: rgba(0,0,0,0.95);
-        backdrop-filter: blur(40px);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        z-index: 2000 !important;
+        transform: translateY(100%) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        background: rgba(0,0,0,0.98) !important;
     }
 
     #archives-panel.open {
-        transform: translateY(0);
-        opacity: 1;
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
     }
 
     .theater-item {
@@ -793,7 +967,9 @@ footer a {
     }
 
     .logo-subtitle {
-        display: none; /* Hide subtitle on tiny screens to save space */
+        display: block !important;
+        font-size: 0.6rem !important;
+        letter-spacing: 1px !important;
     }
 
     #theater-controls {

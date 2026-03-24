@@ -29,12 +29,36 @@ class GenesisAUI {
     }
 
     populatePlaylist() {
-        this.playlistSelect.innerHTML = '';
+        this.renderMusicList();
+    }
+
+    renderMusicList() {
+        const musicList = document.getElementById('music-list');
+        if (!musicList) return;
+        
+        musicList.innerHTML = '';
         this.database.playlist.forEach((track, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.innerText = track.name;
-            this.playlistSelect.appendChild(opt);
+            const item = document.createElement('div');
+            item.className = 'music-item';
+            if (index === this.currentTrackIndex) item.classList.add('active');
+            
+            item.innerHTML = `
+                <div class="music-item-info">
+                    <div class="music-item-name">${track.name}</div>
+                    <div class="music-item-meta">神思庭 · AIS</div>
+                </div>
+                <div class="music-item-status">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+            `;
+            
+            item.onclick = () => {
+                this.hasInteracted = true;
+                this.switchTrack(index);
+            };
+            musicList.appendChild(item);
         });
     }
 
@@ -46,18 +70,22 @@ class GenesisAUI {
         this.actorList = document.getElementById('actor-list');
         this.bgVideo = document.getElementById('bg-video');
         this.mvAudio = document.getElementById('mv-audio');
-        this.musicToggle = document.getElementById('toggle-music');
         this.actorPortrait = document.getElementById('actor-portrait');
         this.archivesPanel = document.getElementById('archives-panel');
-        this.archivesToggle = document.getElementById('toggle-archives');
+        this.archivesToggle = document.getElementById('toggle-archives'); // Main toggle button
         this.archivesClose = document.getElementById('close-archives');
+        this.archivesOpenerIcon = document.getElementById('toggle-archives-btn'); // Internal toggle button
         this.tabBtns = document.querySelectorAll('.tab-btn');
         this.contentLyrics = document.getElementById('content-lyrics');
         this.contentNovel = document.getElementById('content-novel');
-        this.contentTheater = document.getElementById('content-theater');
+        this.contentMusic = document.getElementById('content-music');
+        this.contentVideo = document.getElementById('content-video');
         
-        // Advanced Controls
-        this.playlistSelect = document.getElementById('playlist-select');
+        // Music Player Controls (New Compact Layout)
+        this.musicPlayBtn = document.getElementById('music-play');
+        this.musicPauseBtn = document.getElementById('music-pause');
+        this.musicStopBtn = document.getElementById('music-stop');
+        this.musicNextBtn = document.getElementById('music-next');
         this.musicProgress = document.getElementById('music-progress');
         this.currentTimeLabel = document.getElementById('current-time');
         this.totalTimeLabel = document.getElementById('total-time');
@@ -104,23 +132,34 @@ class GenesisAUI {
     }
 
     bindEvents() {
-        this.listenBtn.addEventListener('click', () => {
+        this.listenBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             this.hasInteracted = true;
-            if (this.isListening) {
-                this.recognition.stop();
-            } else {
-                this.recognition.start();
-            }
+            this.toggleListening();
         });
-
-        this.musicToggle.addEventListener('click', () => this.toggleMusic());
-        this.mvAudio.addEventListener('ended', () => this.playNextTrack());
-        this.archivesToggle.addEventListener('click', () => this.toggleArchives(true));
-        this.archivesClose.addEventListener('click', () => this.toggleArchives(false));
-        this.toggleFullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
         
-        // Playlist control
-        this.playlistSelect.addEventListener('change', (e) => this.switchTrack(e.target.value));
+        // Music Player Controls
+        if (this.musicPlayBtn) this.musicPlayBtn.addEventListener('click', () => {
+            this.hasInteracted = true;
+            this.playAudio();
+        });
+        if (this.musicPauseBtn) this.musicPauseBtn.addEventListener('click', () => this.pauseAudio());
+        if (this.musicStopBtn) this.musicStopBtn.addEventListener('click', () => this.stopAudio());
+        if (this.musicNextBtn) this.musicNextBtn.addEventListener('click', () => this.playNextTrack());
+        
+        // Archives Panel Controls
+        if (this.archivesToggle) {
+            this.archivesToggle.addEventListener('click', () => this.toggleArchives(!this.archivesPanel.classList.contains('open')));
+        }
+        if (this.archivesOpenerIcon) {
+            this.archivesOpenerIcon.addEventListener('click', () => this.toggleArchives(!this.archivesPanel.classList.contains('open')));
+        }
+        if (this.archivesClose) {
+            this.archivesClose.addEventListener('click', () => this.toggleArchives(false));
+        }
+        if (this.toggleFullscreenBtn) {
+            this.toggleFullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+        }
         
         // Progress control
         this.mvAudio.addEventListener('timeupdate', () => this.updateProgress());
@@ -160,41 +199,116 @@ class GenesisAUI {
     }
 
     async loadArchiveContent() {
-        if (this.contentLyrics.innerText && this.contentNovel.innerText && this.contentTheater.children.length > 0) return;
-
+        console.log("📥 Attempting to load archive content...");
+        
+        // Load Lyrics
         try {
-            // Load Lyrics
-            const lyricsRes = await fetch('assets/shensist_genesis_lyrics.txt');
-            if (lyricsRes.ok) this.contentLyrics.innerText = await lyricsRes.text();
+            const lyricsRes = await fetch('assets/shensist_genesis_lyrics.txt?v=' + Date.now());
+            if (lyricsRes.ok) {
+                const text = await lyricsRes.text();
+                this.contentLyrics.innerText = text;
+                console.log("✅ Lyrics loaded (" + text.length + " bytes)");
+            } else {
+                console.warn("❌ Failed to load lyrics:", lyricsRes.status);
+                this.contentLyrics.innerText = "暂时无法加载歌词频率。";
+            }
+        } catch (e) {
+            console.error("❌ Error loading lyrics:", e);
+        }
 
-            // Load Novel
-            const novelRes = await fetch('assets/shensist_genesis_novel.txt');
-            if (novelRes.ok) this.contentNovel.innerText = await novelRes.text();
+        // Load Novel
+        try {
+            const novelRes = await fetch('assets/shensist_genesis_novel.txt?v=' + Date.now());
+            if (novelRes.ok) {
+                const text = await novelRes.text();
+                this.contentNovel.innerText = text;
+                console.log("✅ Novel loaded (" + text.length + " bytes)");
+            } else {
+                console.warn("❌ Failed to load novel:", novelRes.status);
+                this.contentNovel.innerText = "暂时无法读取山海经脉。";
+            }
+        } catch (e) {
+            console.error("❌ Error loading novel:", e);
+        }
 
-            // Load Theater (Videos)
-            if (this.contentTheater.children.length === 0) {
-                this.database.videos.forEach(video => {
+        // Load Theater (Videos) - Don't use fetch, use database
+        try {
+            if (this.contentVideo.children.length <= 1) { // 1 if placeholder exists
+                this.contentVideo.innerHTML = ""; // Clear placeholder
+                const videos = this.database.videos || [];
+                console.log("🎬 Rendering " + videos.length + " theater items...");
+                videos.forEach(video => {
                     const item = document.createElement('div');
                     item.className = 'theater-item';
                     item.innerHTML = `
                         <h4>${video.name}</h4>
-                        <iframe class="video-frame" src="${video.url}" frameborder="0" allowfullscreen></iframe>
+                        <iframe class="video-frame" src="${video.url}" frameborder="0" allowfullscreen loading="lazy"></iframe>
                     `;
-                    this.contentTheater.appendChild(item);
+                    this.contentVideo.appendChild(item);
                 });
             }
-            
-        } catch (error) {
-            console.error("Failed to load archives:", error);
+        } catch (e) {
+            console.error("❌ Error rendering theater:", e);
         }
     }
 
     switchTrack(index) {
+        console.log(`🎵 Switching to track ${index}`);
         this.currentTrackIndex = parseInt(index);
         const track = this.database.playlist[this.currentTrackIndex];
         this.mvAudio.src = track.src;
-        this.mvAudio.play().catch(() => {});
-        this.musicToggle.classList.remove('off');
+        this.playAudio();
+        
+        // Update list active state
+        document.querySelectorAll('.music-item').forEach((el, idx) => {
+            el.classList.toggle('active', idx === this.currentTrackIndex);
+        });
+    }
+
+    toggleListening() {
+        if (!this.recognition) {
+            this.statusText.innerText = "语音技术未由当前浏览器同步";
+            return;
+        }
+        
+        if (this.isListening) {
+            this.recognition.stop();
+        } else {
+            console.log("🎙️ Starting Speech Recognition...");
+            try {
+                this.recognition.start();
+            } catch (e) {
+                console.error("Speech recognition start failed:", e);
+                this.statusText.innerText = "语音初始化失败，请在浏览器中允许麦克风权限";
+            }
+        }
+    }
+
+    playAudio() {
+        console.log("▶️ Playing Audio");
+        this.mvAudio.play().catch(e => console.warn("Play blocked:", e));
+        if (this.musicPlayBtn) this.musicPlayBtn.style.display = 'none';
+        if (this.musicPauseBtn) this.musicPauseBtn.style.display = 'flex';
+    }
+
+    pauseAudio() {
+        console.log("⏸️ Pausing Audio");
+        this.mvAudio.pause();
+        if (this.musicPlayBtn) this.musicPlayBtn.style.display = 'flex';
+        if (this.musicPauseBtn) this.musicPauseBtn.style.display = 'none';
+    }
+
+    stopAudio() {
+        console.log("⏹️ Stopping Audio");
+        this.mvAudio.pause();
+        this.mvAudio.currentTime = 0;
+        if (this.musicPlayBtn) this.musicPlayBtn.style.display = 'flex';
+        if (this.musicPauseBtn) this.musicPauseBtn.style.display = 'none';
+    }
+
+    playNextTrack() {
+        const next = (this.currentTrackIndex + 1) % this.database.playlist.length;
+        this.switchTrack(next);
     }
 
     updateProgress() {
@@ -229,13 +343,9 @@ class GenesisAUI {
     toggleMusic(force) {
         const shouldPlay = force !== undefined ? force : this.mvAudio.paused;
         if (shouldPlay) {
-            this.mvAudio.play().catch(() => {});
-            this.musicToggle.classList.remove('off');
-            this.musicToggle.title = "关闭背景音乐";
+            this.playAudio();
         } else {
-            this.mvAudio.pause();
-            this.musicToggle.classList.add('off');
-            this.musicToggle.title = "开启背景音乐";
+            this.pauseAudio();
         }
     }
 
@@ -311,8 +421,11 @@ class GenesisAUI {
         } else if (text.includes("小说")) {
             this.switchTab('novel');
             this.toggleArchives(true);
+        } else if (text.includes("音乐") || text.includes("歌") || text.includes("曲")) {
+            this.switchTab('music');
+            this.toggleArchives(true);
         } else if (text.includes("视频") || text.includes("剧场") || text.includes("看片")) {
-            this.switchTab('theater');
+            this.switchTab('video');
             this.toggleArchives(true);
         } else if (text.includes("档案") || text.includes("库")) {
             this.toggleArchives(true);

@@ -22,27 +22,12 @@
                 </div>
             </div>
         </a>
-        <div id="theater-controls">
-            <button id="toggle-archives" class="control-btn" title="查看灵境档案">
+        <div id="top-bar-controls">
+            <button id="toggle-archives" class="control-btn" title="查看档案">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                     <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
                 </svg>
             </button>
-            <button id="toggle-music" class="control-btn" title="切换背景音乐">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                </svg>
-            </button>
-            <div class="audio-controls-group">
-                <select id="playlist-select" class="control-select">
-                    <!-- Options populated by JS -->
-                </select>
-                <div class="progress-container">
-                    <span id="current-time" class="time-label">00:00</span>
-                    <input type="range" id="music-progress" value="0" step="0.1" class="progress-slider">
-                    <span id="total-time" class="time-label">00:00</span>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -91,37 +76,68 @@
                         </svg>
                     </button>
                 </div>
-                <div id="input-feedback">
-                    <span id="listening-text">正在监听频率...</span>
-                </div>
             </div>
         </section>
-    </main>
 
-    <!-- Lingjing Archives Panel (Hidden by default) -->
-    <div id="archives-panel" class="glass-panel side-panel">
-        <div class="panel-header">
-            <h2>灵境档案</h2>
-            <div class="header-actions">
-                <button id="toggle-fullscreen" class="panel-btn" title="全屏查看">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                    </svg>
-                </button>
-                <button id="close-archives" class="panel-btn" title="关闭">✕</button>
+        <!-- Lingjing Archives Panel (Hidden by default) -->
+        <div id="archives-panel" class="glass-panel side-panel">
+            <div class="panel-header">
+                <h2>灵境档案</h2>
+                <div class="header-actions">
+                    <button id="toggle-fullscreen" class="panel-btn" title="全屏查看">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                        </svg>
+                    </button>
+                    <button id="toggle-archives-btn" class="panel-btn archives-opener-icon" title="查看档案">
+                         <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                        </svg>
+                    </button>
+                    <button id="close-archives" class="panel-btn" title="关闭">✕</button>
+                </div>
+            </div>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="lyrics">歌词</button>
+                <button class="tab-btn" data-tab="novel">小说</button>
+                <button class="tab-btn" data-tab="music">音乐</button>
+                <button class="tab-btn" data-tab="video">视频</button>
+            </div>
+            <div class="tab-content">
+                <div id="content-lyrics" class="content-view active">正在加载档案频率...</div>
+                <div id="content-novel" class="content-view">正在读取山海经脉...</div>
+                <div id="content-music" class="content-view">
+                    <div class="music-module-container">
+                        <div id="music-list" class="music-list">
+                            <!-- Tracks will be injected here -->
+                        </div>
+                        <div class="music-player-widget">
+                            <div class="progress-bar-container">
+                                <span id="current-time" class="time-label">00:00</span>
+                                <input type="range" id="music-progress" value="0" step="0.1" class="progress-slider">
+                                <span id="total-time" class="time-label">00:00</span>
+                            </div>
+                            <div class="player-controls-compact">
+                                <button id="music-stop" class="player-btn" title="停止">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><rect x="6" y="6" width="12" height="12"/></svg>
+                                </button>
+                                <button id="music-play" class="player-btn large" title="播放">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                                <button id="music-pause" class="player-btn large" title="暂停" style="display:none;">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <button id="music-next" class="player-btn" title="下一曲">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="content-video" class="content-view">正在同步灵境剧院...</div>
             </div>
         </div>
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="lyrics">创世歌词</button>
-            <button class="tab-btn" data-tab="novel">山海小说</button>
-            <button class="tab-btn" data-tab="theater">山海剧场</button>
-        </div>
-        <div class="tab-content">
-            <div id="content-lyrics" class="content-view active"></div>
-            <div id="content-novel" class="content-view"></div>
-            <div id="content-theater" class="content-view"></div>
-        </div>
-    </div>
+    </main>
 
     <!-- Global Music Player (The Official Soundtrack) -->
     <audio id="mv-audio">

@@ -124,11 +124,28 @@ class GenesisAUI {
             };
 
             this.recognition.onend = () => {
-                this.stopListening();
+                this.isListening = false;
+                this.listenBtn.classList.remove('listening');
+                this.updateStatus();
             };
+            this.speechSupported = true;
         } else {
             console.warn("Speech Recognition not supported in this browser.");
-            this.statusText.innerText = "浏览器不支持语音识别";
+            this.speechSupported = false;
+            this.statusText.innerText = "建议使用 Chrome/Safari 开启全息语音";
+        }
+    }
+
+    updateStatus(message) {
+        if (message) {
+            this.statusText.innerText = message;
+            return;
+        }
+
+        if (this.speechSupported) {
+            this.statusText.innerText = `${this.currentActor.name} 已就绪`;
+        } else {
+            this.statusText.innerText = "建议使用 Chrome/Safari 开启全息语音";
         }
     }
 

@@ -3,3 +3,5 @@ flask-cors
 edge-tts
 asyncio
 requests
+uvicorn
+fastapi
